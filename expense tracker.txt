@@ -1,0 +1,78 @@
+from datetime import datetime
+
+expenses = []
+
+# Load expenses from file
+try:
+    with open("expense.txt","r") as file:
+        for line in file:
+            date_input, category, amount, description = line.strip().split("->")
+            expenses.append((date_input, category, float(amount), description))
+except FileNotFoundError:
+    pass
+
+while True:
+    action = input("Enter the action you want to do (add, show, delete, quit): ").lower()
+    
+    if action == "add":
+        date_input = input("Enter date in YYYY-MM-DD: ")
+        try:
+            date = datetime.strptime(date_input, "%Y-%m-%d")
+        except ValueError:
+            print("Invalid date format! Please use YYYY-MM-DD")
+            continue
+        
+        category = input("Enter category of expense: ")
+        
+        while True:
+            amount = input("Enter amount of expense: ")
+            try:
+                amount = float(amount)
+                break
+            except ValueError:
+                print("Invalid amount! Please enter a number.")
+        
+        description = input("Enter the description: ")
+        expenses.append((date_input, category, amount, description))
+        
+        with open("expense.txt", "a") as file:
+            file.write(f"{date_input}->{category}->{amount}->{description}\n")
+        
+        print("Expense added successfully!")
+
+    elif action == "show":
+        if expenses:
+            print(f"{'Date':<12} | {'Category':<15} | {'Amount':<10} | {'Description'}")
+            print("-" * 60)
+            for date_input, category, amount, description in expenses:
+                print(f"{date_input:<12} | {category:<15} | {amount:<10.2f} | {description}")
+        else:
+            print("No expenses recorded yet.")
+
+    elif action == "delete":
+        if expenses:
+            delete_category = input("Enter the category of expense to delete: ")
+            found = False
+            for exp in expenses:
+                date_input, category, amount, description = exp
+                if category.lower() == delete_category.lower():
+                    expenses.remove(exp)
+                    found = True
+                    print("Expense deleted.")
+                    break
+            if not found:
+                print("Expense not found.")
+            else:
+                # Rewrite the file after deletion
+                with open("expense.txt", "w") as file:
+                    for date_input, category, amount, description in expenses:
+                        file.write(f"{date_input}->{category}->{amount}->{description}\n")
+        else:
+            print("No expenses recorded yet.")
+
+    elif action == "quit":
+        print("Goodbye!")
+        break
+    
+    else:
+        print("Invalid action! Try again.")
