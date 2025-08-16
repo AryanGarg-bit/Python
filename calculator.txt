@@ -1,0 +1,16 @@
+import random
+
+secret_number = random.randint(1, 100)
+attempts = 0
+
+while True:
+    n = int(input("Enter a number to guess: "))
+    attempts += 1
+    
+    if n < secret_number:
+        print("Enter a higher value")
+    elif n > secret_number:
+        print("Enter a lower value")
+    else:
+        print(f"You Won in {attempts} attempts!")
+        break

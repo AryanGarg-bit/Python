@@ -1,0 +1,24 @@
+tasks = []
+
+while True:
+    action = input("Enter the action (add, remove, show, quit): ").lower()
+    
+    if action == "add":
+        task = input("Enter task to add: ")
+        tasks.append(task)
+        print("Task added successfully!")
+    elif action == "remove":
+        task = input("Enter task to remove: ")
+        if task in tasks:
+            tasks.remove(task)
+            print("Task removed")
+        else:
+            print("Task not found")
+    elif action == "show":
+        for task in tasks:
+            print("✅", task)
+    elif action == "quit":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid action")

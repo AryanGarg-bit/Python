@@ -1,0 +1,22 @@
+import random
+
+Hand = ["rock", "paper", "scissors"]
+Computer = random.choice(Hand)
+
+while True:
+    player = input("Enter an input (Rock, Paper, Scissors): ").lower()
+    
+    if player not in Hand:
+        print("Invalid input! Try again.")
+        continue
+    
+    if player == Computer:
+        print(f"Draw! Computer also chose {Computer}")
+    elif (player == "rock" and Computer == "scissors") or \
+         (player == "paper" and Computer == "rock") or \
+         (player == "scissors" and Computer == "paper"):
+        print(f"You won! Computer chose {Computer}")
+    else:
+        print(f"Computer won! Computer chose {Computer}")
+    
+    break

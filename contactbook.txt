@@ -1,0 +1,78 @@
+contacts = []
+
+# Load contacts from file
+try:
+    with open("Contact.txt","r") as file:
+        for line in file:
+            name, contact = line.strip().split("->")
+            contacts.append((name, contact))
+except FileNotFoundError:
+    pass
+
+while True:
+    action = input("Enter the action (add, show, search, delete, update, quit): ").lower()
+    
+    if action == "add":
+        name = input("Enter name: ")
+        contact = input("Enter contact number: ")
+        contacts.append((name, contact))
+        with open("Contact.txt", "a") as file:
+            file.write(f"{name}->{contact}\n")
+        print("Contact saved!")
+    
+    elif action == "show":
+        if contacts:
+            for name, contact in contacts:
+                print(f"{name} -> {contact}")
+        else:
+            print("No contacts saved yet.")
+    
+    elif action == "search":
+        search_name = input("Enter name to search: ").lower()
+        found = False
+        for name, contact in contacts:
+            if name.lower() == search_name:
+                print(f"{name} -> {contact}")
+                found = True
+                break
+        if not found:
+            print("Contact not found.")
+    
+    elif action == "delete":
+        delete_name = input("Enter name to delete: ").lower()
+        found = False
+        for name, contact in contacts:
+            if name.lower() == delete_name:
+                contacts.remove((name, contact))
+                found = True
+                print("Contact deleted.")
+                break
+        if found:
+            with open("Contact.txt", "w") as file:
+                for name, contact in contacts:
+                    file.write(f"{name}->{contact}\n")
+        else:
+            print("Contact not found.")
+    
+    elif action == "update":
+        update_name = input("Enter name to update: ").lower()
+        found = False
+        for i, (name, contact) in enumerate(contacts):
+            if name.lower() == update_name:
+                new_contact = input(f"Enter new contact number for {name}: ")
+                contacts[i] = (name, new_contact)
+                found = True
+                print("Contact updated.")
+                break
+        if found:
+            with open("Contact.txt", "w") as file:
+                for name, contact in contacts:
+                    file.write(f"{name}->{contact}\n")
+        else:
+            print("Contact not found.")
+    
+    elif action == "quit":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid action!")
